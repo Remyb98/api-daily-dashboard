@@ -4,7 +4,6 @@
 namespace App\Service;
 
 use App\Exception\ApiKeyException;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpClient\NativeHttpClient;
 use Exception;
 
@@ -16,11 +15,13 @@ class NewsService
 
     private $apiKey;
 
-    private $manager;
-
-    public function __construct(ObjectManager $manager, $apiKey)
+    /**
+     * NewsService constructor.
+     * @param $apiKey
+     * @throws ApiKeyException
+     */
+    public function __construct($apiKey)
     {
-        $this->manager = $manager;
         $this->apiKey = $apiKey;
         if ($this->apiKey === null) {
             throw new ApiKeyException();

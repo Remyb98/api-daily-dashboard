@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\CalendarService;
 use App\Service\NewsService;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -56,10 +57,13 @@ class TestController extends FOSRestController
     /**
      * @Rest\Get("/calendars")
      * @Rest\View()
-     * https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics
      */
     public function testCalendar(CalendarService $calendarService)
     {
-        return $calendarService->discover("https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics");
+        $user = new User();
+        $user->setIcalURLs(
+            ["https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics"]
+        );
+        return $calendarService->getUserCalendar($user);
     }
 }
