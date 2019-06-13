@@ -60,7 +60,6 @@ class TestController extends FOSRestController
      */
     public function testCalendar(CalendarService $calendarService)
     {
-        $calendarService->discover("https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics");
-        return 0;
+        return $calendarService->discover("https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics");
     }
 }

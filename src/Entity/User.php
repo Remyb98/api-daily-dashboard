@@ -34,16 +34,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $newsCountry;
-
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $newsCategory = [];
-
-    /**
      * @ORM\Column(type="array", nullable=true)
      */
     private $weatherLocation = [];
@@ -134,30 +124,6 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getNewsCountry(): ?string
-    {
-        return $this->newsCountry;
-    }
-
-    public function setNewsCountry(?string $newsCountry): self
-    {
-        $this->newsCountry = $newsCountry;
-
-        return $this;
-    }
-
-    public function getNewsCategory(): ?array
-    {
-        return $this->newsCategory;
-    }
-
-    public function setNewsCategory(?array $newsCategory): self
-    {
-        $this->newsCategory = $newsCategory;
-
-        return $this;
     }
 
     public function getWeatherLocation(): ?array

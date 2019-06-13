@@ -14,8 +14,6 @@ class AppFixtures extends Fixture
         $user
             ->setEmail("user@mail.com")
             ->setPassword("password")
-            ->setNewsCategory(['"general"'])
-            ->setNewsCountry("fr")
         ;
 
         $manager->persist($user);
