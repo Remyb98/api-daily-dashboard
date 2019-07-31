@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -34,19 +36,32 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\OneToOne(targetEntity="App\Entity\ModulePref", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $weatherLocation = [];
+    private $Pref;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\FollowedStation", mappedBy="user", orphanRemoval=true)
      */
-    private $icalURLs = [];
+    private $FollowedStations;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Weather", mappedBy="user", orphanRemoval=true)
      */
-    private $lineFollowed = [];
+    private $Weathers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Calendar", mappedBy="user", orphanRemoval=true)
+     */
+    private $Calendars;
+
+    public function __construct()
+    {
+        $this->FollowedStations = new ArrayCollection();
+        $this->Weathers = new ArrayCollection();
+        $this->Calendars = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -126,38 +141,107 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getWeatherLocation(): ?array
+    public function getPref(): ?ModulePref
     {
-        return $this->weatherLocation;
+        return $this->Pref;
     }
 
-    public function setWeatherLocation(?array $weatherLocation): self
+    public function setPref(ModulePref $Pref): self
     {
-        $this->weatherLocation = $weatherLocation;
+        $this->Pref = $Pref;
 
         return $this;
     }
 
-    public function getIcalURLs(): ?array
+    /**
+     * @return Collection|FollowedStation[]
+     */
+    public function getFollowedStations(): Collection
     {
-        return $this->icalURLs;
+        return $this->FollowedStations;
     }
 
-    public function setIcalURLs(?array $icalURLs): self
+    public function addFollowedStation(FollowedStation $followedStation): self
     {
-        $this->icalURLs = $icalURLs;
+        if (!$this->FollowedStations->contains($followedStation)) {
+            $this->FollowedStations[] = $followedStation;
+            $followedStation->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getLineFollowed(): ?array
+    public function removeFollowedStation(FollowedStation $followedStation): self
     {
-        return $this->lineFollowed;
+        if ($this->FollowedStations->contains($followedStation)) {
+            $this->FollowedStations->removeElement($followedStation);
+            // set the owning side to null (unless already changed)
+            if ($followedStation->getUser() === $this) {
+                $followedStation->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setLineFollowed(?array $lineFollowed): self
+    /**
+     * @return Collection|Weather[]
+     */
+    public function getWeathers(): Collection
     {
-        $this->lineFollowed = $lineFollowed;
+        return $this->Weathers;
+    }
+
+    public function addWeather(Weather $weather): self
+    {
+        if (!$this->Weathers->contains($weather)) {
+            $this->Weathers[] = $weather;
+            $weather->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeather(Weather $weather): self
+    {
+        if ($this->Weathers->contains($weather)) {
+            $this->Weathers->removeElement($weather);
+            // set the owning side to null (unless already changed)
+            if ($weather->getUser() === $this) {
+                $weather->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->Calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->Calendars->contains($calendar)) {
+            $this->Calendars[] = $calendar;
+            $calendar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->Calendars->contains($calendar)) {
+            $this->Calendars->removeElement($calendar);
+            // set the owning side to null (unless already changed)
+            if ($calendar->getUser() === $this) {
+                $calendar->setUser(null);
+            }
+        }
 
         return $this;
     }
