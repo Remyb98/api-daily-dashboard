@@ -18,10 +18,11 @@ class CalendarService
      */
     public function getUserCalendar(User $user): array
     {
-        $urls = $user->getIcalURLs();
+        $calendarsURL = $user->getCalendars();
+
         $calendars = [];
-        foreach ($urls as $url) {
-            array_push($calendars, $this->fetchEvents($url));
+        foreach ($calendarsURL as $calendar) {
+            array_push($calendars, $this->fetchEvents($calendar->getURL()));
         }
         return $calendars;
     }
@@ -50,6 +51,8 @@ class CalendarService
             $event->dtstamp = $this->formatDate($event->dtstamp);
             $event->created = ($event->created !== null)? $this->formatDate($event->created) : null;
             $event->lastmodified = ($event->lastmodified !== null)? $this->formatDate($event->lastmodified) : null;
+            $event->start = $event->dtstart;
+            $event->end = $event->dtstart;
         }
         return $events;
     }

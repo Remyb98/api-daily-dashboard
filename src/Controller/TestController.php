@@ -3,11 +3,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
 use App\Entity\User;
 use App\Service\CalendarService;
 use App\Service\NewsService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 
 /**
  * Class TestController
@@ -15,7 +16,7 @@ use FOS\RestBundle\Controller\FOSRestController;
  * Just a stupid controller for test during dev
  * should be deleted at the end :)
  */
-class TestController extends FOSRestController
+class TestController extends AbstractFOSRestController
 {
 
     /**
@@ -57,13 +58,20 @@ class TestController extends FOSRestController
     /**
      * @Rest\Get("/calendars")
      * @Rest\View()
+     * @param CalendarService $calendarService
+     * @return array
      */
     public function testCalendar(CalendarService $calendarService)
     {
         $user = new User();
-        $user->setIcalURLs(
-            ["https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics"]
-        );
+        $calendar = new Calendar();
+        $calendar
+            ->setURL('https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40' .
+                'group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics')
+            ->setColor('#447474')
+            ->setUser($user)
+        ;
+        $user->addCalendar($calendar);
         return $calendarService->getUserCalendar($user);
     }
 }
