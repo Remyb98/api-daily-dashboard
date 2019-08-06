@@ -5,8 +5,10 @@ namespace App\Controller;
 
 use App\Entity\Calendar;
 use App\Entity\User;
+use App\Entity\Weather;
 use App\Service\CalendarService;
 use App\Service\NewsService;
+use App\Service\WeatherService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
@@ -73,5 +75,43 @@ class TestController extends AbstractFOSRestController
         ;
         $user->addCalendar($calendar);
         return $calendarService->getUserCalendar($user);
+    }
+
+    /**
+     * @Rest\Get("/weathers/current")
+     * @Rest\View()
+     * @param WeatherService $weatherService
+     * @return array
+     */
+    public function testWeatherCurrent(WeatherService $weatherService)
+    {
+        $user = new User();
+        $weather = new Weather();
+        $weather
+            ->setZipcode('93130')
+            ->setCountryCode('fr')
+            ->setUser($user)
+        ;
+        $user->addWeather($weather);
+        return $weatherService->getCurrentWeather('93130', 'fr');
+    }
+
+    /**
+     * @Rest\Get("weathers/forecast")
+     * @Rest\View()
+     * @param WeatherService $weatherService
+     * @return array|mixed
+     */
+    public function testWeatherForecast(WeatherService $weatherService)
+    {
+        $user = new User();
+        $weather = new Weather();
+        $weather
+            ->setZipcode('93130')
+            ->setCountryCode('fr')
+            ->setUser($user)
+        ;
+        $user->addWeather($weather);
+        return $weatherService->getForecast('93130', 'fr');
     }
 }

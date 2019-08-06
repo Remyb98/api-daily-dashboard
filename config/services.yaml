@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     api_new: '%env(API_NEWS)%'
+    api_weather: '%env(API_WEATHER)%'
     locale: 'en'
 
 services:
@@ -30,3 +31,6 @@ services:
     App\Service\NewsService:
         arguments:
             $apiKey: '%api_new%'
+    App\Service\WeatherService:
+        arguments:
+            $apiKey: '%api_weather%'
