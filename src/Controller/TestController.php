@@ -78,31 +78,12 @@ class TestController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/weathers/current")
-     * @Rest\View()
-     * @param WeatherService $weatherService
-     * @return array
-     */
-    public function testWeatherCurrent(WeatherService $weatherService)
-    {
-        $user = new User();
-        $weather = new Weather();
-        $weather
-            ->setZipcode('93130')
-            ->setCountryCode('fr')
-            ->setUser($user)
-        ;
-        $user->addWeather($weather);
-        return $weatherService->getCurrentWeather('93130', 'fr');
-    }
-
-    /**
-     * @Rest\Get("weathers/forecast")
+     * @Rest\Get("weathers")
      * @Rest\View()
      * @param WeatherService $weatherService
      * @return array|mixed
      */
-    public function testWeatherForecast(WeatherService $weatherService)
+    public function testWeather(WeatherService $weatherService)
     {
         $user = new User();
         $weather = new Weather();
@@ -112,6 +93,13 @@ class TestController extends AbstractFOSRestController
             ->setUser($user)
         ;
         $user->addWeather($weather);
-        return $weatherService->getForecast('93130', 'fr');
+        $weather = new Weather();
+        $weather
+            ->setZipcode('93160')
+            ->setCountryCode('fr')
+            ->setUser($user)
+        ;
+        $user->addWeather($weather);
+        return $weatherService->getUserWeatherSituation($user);
     }
 }
