@@ -58,18 +58,19 @@ class TestController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/calendars")
+     * @Rest\Get("/calendars/{url}")
      * @Rest\View()
      * @param CalendarService $calendarService
      * @return array
      */
-    public function testCalendar(CalendarService $calendarService)
+    public function testCalendar(CalendarService $calendarService, string $url)
     {
         $user = new User();
         $calendar = new Calendar();
         $calendar
-            ->setURL('https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40' .
-                'group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics')
+            /*->setURL('https://calendar.google.com/calendar/ical/7o582tftsgac104iaolk7p4l4o%40' .
+                'group.calendar.google.com/private-1645c274b41fc16cab63f91c20651c89/basic.ics')*/
+            ->setURL($url)
             ->setColor('#447474')
             ->setUser($user)
         ;
@@ -78,24 +79,24 @@ class TestController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("weathers")
+     * @Rest\Get("/weathers/{zipcode}")
      * @Rest\View()
      * @param WeatherService $weatherService
      * @return array|mixed
      */
-    public function testWeather(WeatherService $weatherService)
+    public function testWeather(WeatherService $weatherService, string $zipcode)
     {
         $user = new User();
         $weather = new Weather();
-        $weather
+        /*$weather
             ->setZipcode('93130')
             ->setCountryCode('fr')
             ->setUser($user)
         ;
-        $user->addWeather($weather);
+        $user->addWeather($weather);*/
         $weather = new Weather();
         $weather
-            ->setZipcode('93160')
+            ->setZipcode($zipcode)
             ->setCountryCode('fr')
             ->setUser($user)
         ;
