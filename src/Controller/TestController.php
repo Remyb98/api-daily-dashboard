@@ -58,6 +58,28 @@ class TestController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\Get("/news/{keyword}")
+     * @Rest\View()
+     * @return array
+     */
+    public function testNewsKeyword(NewsService $newsService, string $keyword)
+    {
+        $data = $newsService->getNewsByKeyword($keyword);
+        return $data;
+    }
+
+    /**
+     * @Rest\get("/news/{source}/{keyword}")
+     * @Rest\View()
+     * @return array
+     */
+    public function testNewsKeywordAndSource(NewsService $newsService, string $keyword, string $source)
+    {
+        $data = $newsService->getNewsByKeyword($keyword, $source);
+        return $data;
+    }
+
+    /**
      * @Rest\Get("/calendars/{url}")
      * @Rest\View()
      * @param CalendarService $calendarService
